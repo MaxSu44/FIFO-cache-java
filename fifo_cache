@@ -1,0 +1,89 @@
+package fifo;
+
+import java.util.Scanner;
+import java.util.LinkedList;
+import java.util.Queue;
+
+/**
+ *
+ * @MaxSu44
+ */
+public class fifoCache {
+
+    public static void main(String args[]) 
+    {
+            //Crio o array com os dados almazenados
+            int arr[] = {1,3,4,7,6,4,3,6,8,3,4,1,8,3,4,9,8};
+            
+            //Declaro as variaveis
+            int atual, remove, num_sub=0, cache_hit=0;
+            int tam_cache;
+            
+            //Solicito ao usuario indicar o tamanho da cache
+            System.out.print("Qual o tamanho da cache? \n");
+            Scanner cache = new Scanner(System.in);
+            tam_cache = cache.nextInt();
+            
+            
+            //Criando a memória cache
+            int[] mem_cache = new int[tam_cache];
+            
+            //Criando a fila
+            Queue<Integer> fifo = new LinkedList<Integer>();
+            
+            for (int i = 0; i < arr.length; i++)
+             {
+            
+            atual = (arr[i]);
+            
+            //Verifica se o elemento está na memória cache
+            for(int j = 0; j < tam_cache; j++)
+            { 
+                if(atual == mem_cache[j])
+                { 
+                   cache_hit++;
+                }
+            }
+            
+            //Caso não estiver na memória cache e tiver espaço vazio
+            if(cache_hit==0 && i<tam_cache)
+            { 
+                mem_cache[i] = atual;
+                fifo.add(arr[i]);
+            }
+            //Caso não estiver na memória cache e precisar fazer substituição
+            if(cache_hit==0 && i>tam_cache)
+            {
+                fifo.add(arr[i]);                
+                remove = fifo.remove();
+                
+                for(int k = 0; k < tam_cache; k++)
+                { 
+                    if(remove == mem_cache[k])
+                    { 
+                       mem_cache[k]=atual;
+                       num_sub++;
+                    }
+                }
+                
+            }
+            
+            //Zerar o contador de acerto de cache
+            cache_hit=0;
+            }
+
+        //Memória cache no final da execução do algoritmo FIFO
+        System.out.print("Memória cache: \n");
+        for (int i = 0; i < tam_cache; i++)
+        {
+            System.out.print(mem_cache[i] + "\n");
+        }
+        
+        //Fila no final da execução do algoritmo FIFO
+        System.out.print("Fila FIFO: " + fifo + "\n"); 
+        
+        //Número de substituições realizadas
+        System.out.print("Número de substituições: " + num_sub + "\n"); 
+       
+    }   
+}
